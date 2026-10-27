@@ -1,0 +1,44 @@
+{{/*
+SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Greenhouse contributors
+SPDX-License-Identifier: Apache-2.0
+*/}}
+
+{{- if eq .Values.exposure.mode "ingress" -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dashboard.fullname" . }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ required ".Values.ingress.className missing" .Values.ingress.className }}
+  rules:
+    - host: "{{ include "dashboard.hostname" $ }}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dashboard.fullname" . }}
+                port:
+                  number: 80
+    - host: "*.{{ include "dashboard.hostname" $ }}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dashboard.fullname" . }}
+                port:
+                  number: 80
+
+  tls:
+    - hosts:
+        - "{{ include "dashboard.hostname" $ }}"
+        - "*.{{ include "dashboard.hostname" $ }}"
+      secretName: "tls-{{ include "dashboard.fullname" . }}"
+{{- end }}
