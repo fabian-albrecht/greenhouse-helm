@@ -2,7 +2,11 @@ name: "Helm lint"
 on:
   pull_request:
     paths:
-      - 'charts/**'
+      - 'authz/**'
+      - 'cors-proxy/**'
+      - 'dashboard/**'
+      - 'idproxy/**'
+      - 'manager/**'
 
 env:
   REGISTRY: ghcr.io

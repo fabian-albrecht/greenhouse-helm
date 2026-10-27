@@ -29,9 +29,9 @@ jobs:
       - name: Discover charts
         id: discover
         run: |
-          # Find all Chart.yaml files directly under charts/<name>/ and build a
+          # Find all Chart.yaml files directly under <name>/ at the repo root and build a
           # [{chartDir, chartName}, ...] matrix from them.
-          matrix=$(find charts -mindepth 2 -maxdepth 2 -name Chart.yaml -printf '%h\n' \
+          matrix=$(find . -mindepth 2 -maxdepth 2 -name Chart.yaml -not -path './.git/*' -printf '%h\n' \
             | sort \
             | while read -r dir; do
                 name=$(yq .name "$dir/Chart.yaml")
