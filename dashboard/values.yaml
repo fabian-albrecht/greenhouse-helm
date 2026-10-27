@@ -19,13 +19,6 @@ replicas: 2
 exposure:
   mode: ingress
 
-# DNS provider selects which DNS-automation annotations are placed on the
-# exposure resource. Defaults to the SAP "disco" controller behavior supplied
-# via ingress.annotations.
-#   disco | external-dns | gardener | none
-dns:
-  provider: disco
-
 # Deployment platform. Selects cert handling (tls-acme vs gardener cert-service).
 #   generic | gardener
 platform: generic
