@@ -2,6 +2,9 @@ name: Package Helm Chart and publish to GitHub Packages
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feat/create-greenhouse-charts
 
 permissions:
   contents: write
