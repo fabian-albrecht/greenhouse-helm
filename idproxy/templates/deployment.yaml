@@ -14,8 +14,8 @@ spec:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: {{ .Values.maxSurge | default 1 }}
-      maxUnavailable: {{ $.Values.maxUnavailable | default 0 }}
+      maxSurge: {{ .Values.maxSurge }}
+      maxUnavailable: {{ $.Values.maxUnavailable }}
   selector:
     matchLabels:
       {{- include "idproxy.selectorLabels" . | nindent 6 }}
@@ -56,7 +56,7 @@ spec:
           command:
             - /idproxy
             - --issuer=https://{{include "idproxy.auth.hostname" $}}
-            {{- range $origin := .Values.corsAllowedOrigins | default (list "*") }}
+            {{- range $origin := .Values.corsAllowedOrigins }}
             - --allowed-origins={{ $origin }}
             {{- end }}
             - --keep-upstream-groups={{ .Values.keepUpstreamGroups }}

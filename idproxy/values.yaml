@@ -37,6 +37,9 @@ serviceAccount:
 maxSurge: 2
 maxUnavailable: 0
 
+corsAllowedOrigins:
+  - "*"
+
 podAnnotations: {}
 
 podSecurityContext: {}
