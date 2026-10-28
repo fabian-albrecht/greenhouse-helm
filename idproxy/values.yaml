@@ -49,12 +49,6 @@ service:
   type: ClusterIP
   port: 80
 
-# Exposure mode: how Greenhouse exposes this component.
-#   ingress -> render a Kubernetes Ingress (default, unchanged behavior)
-#   gateway -> render a Gateway API HTTPRoute instead
-exposure:
-  mode: ingress
-
 # Deployment platform. Selects cert handling (tls-acme vs gardener cert-service).
 #   generic | gardener
 platform: generic
@@ -64,12 +58,6 @@ ingress:
   className: "nginx"
   tls: true
   annotations: {}
-
-# Gateway API settings, used when exposure.mode == "gateway".
-gateway:
-  parentRefName: ""
-  parentRefNamespace: ""
-  sectionName: ""
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
