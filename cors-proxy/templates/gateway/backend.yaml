@@ -15,6 +15,6 @@ spec:
   type: Static
   static:
     hosts:
-      - host: {{ required "apiserverHostname is required" .Values.apiserverHostname }}
+      - host: {{ .Values.gateway.apiserverHostname | default "kubernetes.default.svc" }}
         port: 443
 {{- end }}
