@@ -1,0 +1,38 @@
+{{/*
+SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+SPDX-License-Identifier: Apache-2.0
+*/}}
+
+{{- if and .Values.gateway.enabled (.Capabilities.APIVersions.Has "gateway.kgateway.dev/v1alpha1") -}}
+{{- $fullName := include "cors-proxy.fullname" . -}}
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: {{ $fullName }}-cors
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "cors-proxy.labels" . | nindent 4 }}
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: {{ $fullName }}
+  cors:
+    allowCredentials: true
+    allowOrigins:
+      - "*"
+    allowMethods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - OPTIONS
+    allowHeaders:
+      - Authorization
+      - Content-Type
+      - Accept
+    exposeHeaders:
+      - Content-Length
+    maxAge: 86400
+{{- end }}
