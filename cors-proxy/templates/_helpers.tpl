@@ -8,13 +8,6 @@ Validate that ingress and gateway are not both enabled.
 {{- end -}}
 
 
-{{- define "cors-proxy.validateExposure" -}}
-{{- if and .Values.ingress.enabled .Values.gateway.enabled -}}
-{{- fail "ingress.enabled and gateway.enabled are mutually exclusive — disable one of them" -}}
-{{- end -}}
-{{- end -}}
-
-
 {{/*
 Expand the name of the chart.
 */}}
