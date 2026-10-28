@@ -76,7 +76,7 @@ Create the name of the service account to use
 
 {{/* Render the auth hostname */}}
 {{- define "idproxy.auth.hostname" -}}
-{{- printf "%s.%s" "auth" (required "global.dnsDomain missing" .Values.global.dnsDomain) }}
+{{- printf "%s.%s" .Values.subDomain (required "global.dnsDomain missing" .Values.global.dnsDomain) }}
 {{- end }}
 
 {{/*

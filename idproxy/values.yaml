@@ -5,6 +5,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Subdomain for this chart's exposed hostname (combined with global.dnsDomain).
+subDomain: "auth"
+
 replicaCount: 2
 # If set the token returned by the IDProxy will contain the Greenhouse groups
 # and all groups returned by the upstream idp

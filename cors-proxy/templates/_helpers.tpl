@@ -87,9 +87,5 @@ Create the name of the service account to use
 
 {{/* Render the k8s api hostname */}}
 {{- define "cors-proxy.api.hostname" -}}
-{{- if .Values.apiserverHostname -}}
-{{- .Values.apiserverHostname -}}
-{{- else -}}
-{{- printf "api.%s" (required "global.dnsDomain missing" .Values.global.dnsDomain) -}}
-{{- end -}}
+{{- printf "%s.%s" .Values.subDomain (required "global.dnsDomain missing" .Values.global.dnsDomain) -}}
 {{- end }}

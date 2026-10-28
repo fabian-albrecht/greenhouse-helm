@@ -12,21 +12,17 @@ contains "dashboard". Falls back to "<release>-dashboard" otherwise.
 
 {{/* Render the dashboard hostname */}}
 {{- define "dashboard.hostname" -}}
-{{- printf "%s.%s" "dashboard" (required "global.dnsDomain missing" .Values.global.dnsDomain) }}
+{{- printf "%s.%s" .Values.subDomain (required "global.dnsDomain missing" .Values.global.dnsDomain) }}
 {{- end }}
 
 {{/* Render the auth hostname */}}
 {{- define "dashboard.auth.hostname" -}}
-{{- printf "https://%s.%s" "auth" (required "global.dnsDomain missing" .Values.global.dnsDomain) }}
+{{- printf "https://%s.%s" .Values.authSubDomain (required "global.dnsDomain missing" .Values.global.dnsDomain) }}
 {{- end }}
 
 {{/* Render the k8s api hostname */}}
 {{- define "dashboard.api.hostname" -}}
-{{- if .Values.apiserverHostname -}}
-{{- printf "https://%s" .Values.apiserverHostname -}}
-{{- else -}}
-{{- printf "https://api.%s" (required "global.dnsDomain missing" .Values.global.dnsDomain) -}}
-{{- end -}}
+{{- printf "https://%s.%s" .Values.corsProxySubDomain (required "global.dnsDomain missing" .Values.global.dnsDomain) -}}
 {{- end }}
 
 {{/*

@@ -5,9 +5,12 @@ global:
   oidc:
     clientID: ""
 
-# Hostname of the Kubernetes API server used as the dashboard's API endpoint.
-# Defaults to "api.<global.dnsDomain>" when left empty.
-apiserverHostname: ""
+# Subdomain for this chart's exposed hostname (combined with global.dnsDomain).
+subDomain: "dashboard"
+# Subdomain of the CORS proxy (cors-proxy chart's subDomain value).
+corsProxySubDomain: "api"
+# Subdomain of the auth endpoint (idproxy chart's subDomain value).
+authSubDomain: "auth"
 
 image:
   repository: ghcr.io/cloudoperators/juno-app-greenhouse

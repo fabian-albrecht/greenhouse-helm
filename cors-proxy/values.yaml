@@ -10,9 +10,8 @@ global:
   # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
   dnsDomain: ""
 
-# Hostname of the Kubernetes API server exposed via this CORS proxy.
-# Defaults to "api.<global.dnsDomain>" when left empty.
-apiserverHostname: ""
+# Subdomain for this chart's exposed hostname (combined with global.dnsDomain).
+subDomain: "api"
 
 replicaCount: 2
 
