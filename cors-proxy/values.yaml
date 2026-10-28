@@ -5,6 +5,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Global values shared across all Greenhouse charts in an umbrella deployment.
+global:
+  # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
+  dnsDomain: ""
+  # Subdomain prefix for the Kubernetes API endpoint (defaults to "api").
+  kubeAPISubDomain: ""
+
 replicaCount: 2
 
 image:
