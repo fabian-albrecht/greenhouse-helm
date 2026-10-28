@@ -3,5 +3,4 @@
 
 global:
   dnsDomain: example.com
-  kubeAPISubDomain: ""
 # apiServerFQDN: "kubernetes.default.svc"

@@ -5,6 +5,10 @@ global:
   oidc:
     clientID: ""
 
+# Hostname of the Kubernetes API server used as the dashboard's API endpoint.
+# Defaults to "api.<global.dnsDomain>" when left empty.
+apiserverHostname: ""
+
 image:
   repository: ghcr.io/cloudoperators/juno-app-greenhouse
   # Overrides the image tag to use a specific digest instead

@@ -22,7 +22,11 @@ contains "dashboard". Falls back to "<release>-dashboard" otherwise.
 
 {{/* Render the k8s api hostname */}}
 {{- define "dashboard.api.hostname" -}}
-{{- printf "https://%s.%s" (default "api" .Values.global.kubeAPISubDomain) (required "global.dnsDomain missing" .Values.global.dnsDomain) }}
+{{- if .Values.apiserverHostname -}}
+{{- printf "https://%s" .Values.apiserverHostname -}}
+{{- else -}}
+{{- printf "https://api.%s" (required "global.dnsDomain missing" .Values.global.dnsDomain) -}}
+{{- end -}}
 {{- end }}
 
 {{/*
