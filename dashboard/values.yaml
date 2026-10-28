@@ -3,7 +3,7 @@
 global:
   dnsDomain: ""
   oidc:
-    clientID: ""
+    dashboardClientID: "greenhouse"
 
 # Subdomain for this chart's exposed hostname (combined with global.dnsDomain).
 subDomain: "dashboard"
