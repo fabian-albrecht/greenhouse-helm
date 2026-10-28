@@ -69,8 +69,7 @@ ingress:
 gateway:
   enabled: false
   # Hostname of the API server used as the static Backend target.
-  # Defaults to kubernetes.default.svc (in-cluster API server).
-  apiserverHostname: ""
+  apiserverHostname: "kubernetes.default.svc"
   # Name/namespace of the central Gateway deployed by the manager chart.
   parentRefName: ""
   parentRefNamespace: ""

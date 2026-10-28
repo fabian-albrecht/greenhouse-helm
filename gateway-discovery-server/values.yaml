@@ -13,9 +13,8 @@ global:
 # Defaults to "ghapi.<global.dnsDomain>" when left empty.
 hostname: ""
 
-# The external hostname of the API server (used as the static Backend target).
-# Required — must be reachable from within the cluster (e.g. the external API server FQDN).
-apiserverHostname: ""
+# Hostname of the API server used as the static Backend target.
+apiserverHostname: "kubernetes.default.svc"
 
 # Reference to the central Gateway deployed by the manager chart.
 gateway:
