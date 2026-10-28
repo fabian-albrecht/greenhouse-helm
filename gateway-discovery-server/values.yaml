@@ -1,6 +1,9 @@
 # SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
 # SPDX-License-Identifier: Apache-2.0
 
+nameOverride: ""
+fullnameOverride: ""
+
 # Global values shared across all Greenhouse charts in an umbrella deployment.
 global:
   # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
@@ -26,6 +29,6 @@ listenerSetAnnotations: {}
 httpRouteAnnotations: {}
 
 # TLS certificate Secret name for the HTTPS listener.
-# cert-manager can provision this automatically via gateway annotations on the manager chart.
+# Defaults to <release-name>-tls; cert-manager will create the Secret at this name.
 tls:
   secretName: ""

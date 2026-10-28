@@ -29,4 +29,4 @@ spec:
         mode: Terminate
         certificateRefs:
           - kind: Secret
-            name: {{ required "tls.secretName is required" .Values.tls.secretName }}
+            name: {{ .Values.tls.secretName | default (printf "%s-tls" (include "gateway-discovery-server.fullname" .)) }}
