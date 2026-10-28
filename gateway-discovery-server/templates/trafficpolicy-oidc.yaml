@@ -1,0 +1,24 @@
+{{/*
+SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+SPDX-License-Identifier: Apache-2.0
+*/}}
+
+# Rewrites the OIDC discovery response body to replace the jwks_uri with the external hostname.
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: {{ .Release.Name }}-oidc-discovery
+  namespace: {{ .Release.Namespace }}
+spec:
+  transformation:
+    response:
+      body:
+        parseAs: AsJson
+        value: |
+          {
+            "issuer": "{{ `{{ issuer }}` }}",
+            "jwks_uri": "https://{{ include "gateway-discovery-server.hostname" . }}/openid/v1/jwks",
+            "response_types_supported": {{ `{{ response_types_supported }}` }},
+            "subject_types_supported": {{ `{{ subject_types_supported }}` }},
+            "id_token_signing_alg_values_supported": {{ `{{ id_token_signing_alg_values_supported }}` }}
+          }

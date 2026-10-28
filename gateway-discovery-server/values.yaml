@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# Global values shared across all Greenhouse charts in an umbrella deployment.
+global:
+  # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
+  dnsDomain: ""
+
+# Hostname at which the API server discovery endpoints are exposed.
+# Defaults to "ghapi.<global.dnsDomain>" when left empty.
+hostname: ""
+
+# The external hostname of the API server (used as the static Backend target).
+# Required — must be reachable from within the cluster (e.g. the external API server FQDN).
+apiserverHostname: ""
+
+# Reference to the central Gateway deployed by the manager chart.
+gateway:
+  parentRefName: ""
+  parentRefNamespace: ""
+
+# Annotations placed on the ListenerSet resource (e.g. cert-manager issuer).
+listenerSetAnnotations: {}
+
+# Annotations placed on the HTTPRoute resource (e.g. external-dns).
+httpRouteAnnotations: {}
+
+# TLS certificate Secret name for the HTTPS listener.
+# cert-manager can provision this automatically via gateway annotations on the manager chart.
+tls:
+  secretName: ""
