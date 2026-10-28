@@ -82,6 +82,8 @@ nodeSelector: {}
 tolerations: []
 
 global:
+  # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
+  dnsDomain: ""
   dex:
     backend: kubernetes
     postgresql:
