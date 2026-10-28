@@ -1,0 +1,52 @@
+{{/*
+SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+SPDX-License-Identifier: Apache-2.0
+*/}}
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Release.Name }}-discovery
+  namespace: {{ .Release.Namespace }}
+  {{- with .Values.httpRouteAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: ListenerSet
+      name: {{ .Release.Name }}-discovery
+      sectionName: https-discovery
+  hostnames:
+    - {{ include "gateway-discovery-server.hostname" . | quote }}
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /.well-known/openid-configuration
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: kubernetes.default.svc.cluster.local
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.kgateway.dev
+            kind: TrafficPolicy
+            name: {{ .Release.Name }}-oidc-discovery
+      backendRefs:
+        - group: gateway.kgateway.dev
+          kind: Backend
+          name: {{ .Release.Name }}-apiserver
+    - matches:
+        - path:
+            type: Exact
+            value: /openid/v1/jwks
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: kubernetes.default.svc.cluster.local
+      backendRefs:
+        - group: gateway.kgateway.dev
+          kind: Backend
+          name: {{ .Release.Name }}-apiserver
