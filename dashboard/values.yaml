@@ -25,7 +25,13 @@ replicas: 2
 platform: generic
 
 ingress:
+  # Expose the dashboard web app via Ingress. On by default (the dashboard is a
+  # web app that must be reachable); set to false to use Gateway API or your own.
+  enabled: true
   className: nginx
+  # Annotations for the dashboard Ingress (e.g. cert-manager issuer, external-dns
+  # hostname). Set on the Plugin/values as needed.
+  annotations: {}
 
 dashboard:
   assetServerURL: origin

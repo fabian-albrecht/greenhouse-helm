@@ -5,7 +5,7 @@ apiVersion: v2
 type: application
 description: A Helm chart for hosting the dashboard and its required CORS proxy
 name: dashboard
-version: 0.4.0
+version: 0.4.1
 appVersion: "v0.18.0"
 
 # NOTE: cors-proxy is no longer a subchart dependency. Its templates are merged
