@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v2
+name: gateway-discovery-server
+description: A Helm chart that exposes the Kubernetes API server discovery endpoints via the central Greenhouse Gateway
+type: application
+version: 0.2.0
+appVersion: "v0.18.0"

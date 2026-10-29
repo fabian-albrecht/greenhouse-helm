@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+# SPDX-License-Identifier: Apache-2.0
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Global values shared across all Greenhouse charts in an umbrella deployment.
+global:
+  # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
+  dnsDomain: ""
+
+# Subdomain for this chart's exposed hostname (combined with global.dnsDomain),
+# consistent with the other Greenhouse charts (idproxy "auth", cors-proxy "api").
+subDomain: "discovery"
+
+# Full hostname at which the API server discovery endpoints are exposed.
+# Overrides subDomain when set. Defaults to "<subDomain>.<global.dnsDomain>".
+hostname: ""
+
+# Hostname of the API server used as the static Backend target.
+apiserverHostname: "kubernetes.default.svc"
+
+# Reference to the central Gateway deployed by the manager chart.
+gateway:
+  parentRefName: ""
+  parentRefNamespace: ""
+
+# Annotations placed on the ListenerSet resource (e.g. cert-manager issuer).
+listenerSetAnnotations: {}
+
+# Annotations placed on the HTTPRoute resource (e.g. external-dns).
+httpRouteAnnotations: {}
+
+# TLS certificate Secret name for the HTTPS listener.
+# Defaults to <release-name>-tls; cert-manager will create the Secret at this name.
+tls:
+  secretName: ""

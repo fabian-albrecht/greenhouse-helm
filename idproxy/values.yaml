@@ -1,0 +1,96 @@
+# SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Greenhouse contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# Default values for idproxy.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Subdomain for this chart's exposed hostname (combined with global.dnsDomain).
+subDomain: "auth"
+
+replicaCount: 2
+# If set the token returned by the IDProxy will contain the Greenhouse groups
+# and all groups returned by the upstream idp
+keepUpstreamGroups: false
+
+image:
+  repository: ghcr.io/cloudoperators/greenhouse
+  # Overrides the image tag whose default is the chart appVersion.
+  # tag:
+  # Overrides the image tag to use a specific digest instead
+  # digest: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+maxSurge: 2
+maxUnavailable: 0
+
+corsAllowedOrigins:
+  - "*"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+
+service:
+  type: ClusterIP
+  port: 80
+
+# Deployment platform. Selects cert handling (tls-acme vs gardener cert-service).
+#   generic | gardener
+platform: generic
+
+ingress:
+  enabled: true
+  className: "nginx"
+  tls: true
+  annotations: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+global:
+  # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
+  dnsDomain: ""
+  dex:
+    backend: kubernetes
+    postgresql:
+      postgresqlDatabase: dex
+      postgresqlUsername: dex
+      # postgresqlSecretName: "" # defaults to <release-name>-pguser-<postgresqlUsername>
+      # postgresqlHost: ""       # defaults to <release-name>-postgresql
+
+# Name of the feature-flags ConfigMap to read. Defaults to <release-name>-feature-flags.
+featureFlagsConfigMap: ""

@@ -1,0 +1,174 @@
+# SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Greenhouse contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# Override the name used in resource labels/names. Defaults to the chart name.
+nameOverride: greenhouse
+# Override the full name used in resource names. Defaults to "<release>-<nameOverride>".
+# fullnameOverride: ""
+
+# Global values are shared across all charts in an umbrella deployment.
+global:
+  # DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
+  # Used as the base domain for all ingress hostnames and OIDC issuer URLs.
+  # Required — no default.
+  dnsDomain: ""
+
+  dex:
+    # Dex storage backend. Use "kubernetes" (CRD-based, no external DB) or
+    # "postgres" (requires a PostgreSQL instance configured below).
+    backend: kubernetes
+    # PostgreSQL connection details — only used when backend is "postgres".
+    postgresql:
+      postgresqlDatabase: dex
+      postgresqlUsername: dex
+
+  plugin:
+    # Mirror plugin OCI artifacts to a local registry before deploying to remote
+    # clusters. Requires a local OCI-compatible registry reachable by the manager.
+    ociMirroringEnabled: false
+
+  pluginPreset:
+    # Evaluate CEL expressions in PluginPreset option value templates.
+    expressionEvaluationEnabled: true
+    # Enable PluginPreset integration: automatically create Plugins for each
+    # cluster that matches a PluginPreset's cluster selector.
+    integrationEnabled: true
+
+  workloadIdentity:
+    # Enable workload identity support (e.g. IRSA / Workload Identity Federation)
+    # so plugins can assume cloud-provider roles without static credentials.
+    enabled: false
+
+# Gateway API — deploy a central Gateway resource that component charts attach to via ListenerSets.
+# Requires gateway.networking.k8s.io/v1 CRDs to be installed (e.g. via kgateway).
+gateway:
+  enabled: false
+  # GatewayClass name to use (e.g. "kgateway").
+  className: ""
+  # Controls which namespaces may attach ListenerSets to this Gateway.
+  # Allowed values: Same, All, Selector (see Gateway API docs).
+  allowedListenersFrom: Same
+  # Listeners on the Gateway itself. The Gateway API requires at least one
+  # (CRD minItems: 1); per-component HTTPS listeners are attached via
+  # ListenerSets. Leave empty to use the default HTTP :80 base listener, or
+  # provide your own list here.
+  listeners: []
+  # Annotations placed on the Gateway resource itself (e.g. cert-manager issuer, external-dns).
+  annotations: {}
+  # Annotations placed on spec.infrastructure.annotations (propagated to the underlying LB/proxy).
+  infrastructureAnnotations: {}
+
+# Top-level service account used by helm hooks and similar non-controller workloads.
+# Controller and webhook service accounts are managed under their own sections below.
+serviceAccount:
+  # Create the service account. Set to false to bring your own.
+  create: true
+  # Name of the service account. Defaults to the full release name when create is true.
+  name: ""
+
+alerts:
+  # Deploy PrometheusRule manifests for Greenhouse control-plane alerting.
+  enabled: true
+
+perses:
+  # Deploy Perses dashboard ConfigMaps for the Greenhouse control-plane.
+  # Requires the Perses operator to be installed in the cluster.
+  enabled: true
+
+controllerManager:
+  image:
+    repository: ghcr.io/cloudoperators/greenhouse
+    # Overrides the image tag. Defaults to the chart appVersion.
+    # tag: ""
+    # Use a specific image digest instead of a tag (takes precedence over tag).
+    # digest: ""
+
+  replicas: 3
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    # limits: {}
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+  serviceAccount:
+    # Annotations on the controller manager service account (e.g. for IRSA).
+    annotations: {}
+
+  # Persistent volume claim for Flux artifact storage (HelmRelease chart caching).
+  artifactStorage:
+    path: /tmp/data
+    sizeLimit: 1Gi
+
+  # Per-controller concurrency tuning. Increase for large fleets at the cost of
+  # higher API server load.
+  config:
+    plugin:
+      maxConcurrentReconciles: 10
+    pluginPreset:
+      maxConcurrentReconciles: 10
+    cluster:
+      maxConcurrentReconciles: 5
+    catalog:
+      maxConcurrentReconciles: 5
+    team:
+      maxConcurrentReconciles: 5
+    teamRoleBinding:
+      maxConcurrentReconciles: 5
+    bootstrap:
+      maxConcurrentReconciles: 5
+    kubeconfig:
+      maxConcurrentReconciles: 1
+    pluginDefinition:
+      maxConcurrentReconciles: 10
+    clusterPluginDefinition:
+      maxConcurrentReconciles: 5
+
+  # Extra CLI arguments passed to the manager binary.
+  args: []
+
+  # Extra environment variables injected into the manager container.
+  env: []
+
+webhook:
+  replicas: 2
+
+  service:
+    type: ClusterIP
+    ports:
+      - port: 443
+        protocol: TCP
+        targetPort: 9443
+
+# PostgreSQL sub-chart (postgresql-ng) — SAP internal, pulls from Keppel.
+# Only one of postgresqlng or postgresql may be enabled at a time.
+# Set together with global.dex.backend: postgres.
+postgresqlng:
+  enabled: false
+  global:
+    # Container image registry for the postgresql-ng image. Required by the sub-chart.
+    registry: ""
+  alerts:
+    enabled: false
+    support_group: greenhouse
+  resources: {}
+  databases:
+    dex: {}
+  users:
+    dex: {}
+
+# PostgreSQL sub-chart (Bitnami) — open source, pulls from Docker Hub.
+# Only one of postgresqlng or postgresql may be enabled at a time.
+# Set together with global.dex.backend: postgres.
+postgresql:
+  enabled: false
+  auth:
+    database: dex
+    username: dex
+    # password: ""  # set this or use existingSecret

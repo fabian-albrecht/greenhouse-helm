@@ -1,0 +1,9 @@
+dependencies:
+- name: postgresql-ng
+  repository: oci://ghcr.io/sapcc/helm-charts
+  version: 2.2.17
+- name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 18.12.14
+digest: sha256:affb36d878d8d7b6914949dabe72a7ecc532fe17b7ef43a8ae4bfda4eb8e2a35
+generated: "2026-10-22T13:23:19.849233+02:00"
