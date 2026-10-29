@@ -5,14 +5,13 @@ apiVersion: v2
 type: application
 description: A Helm chart for hosting the dashboard
 name: dashboard
-version: 0.3.2
-
+version: 0.3.3
 dependencies:
   # cors-proxy is bundled with the dashboard so the dashboard plugin ships a
   # single chart (one Flux HelmRelease) with its required CORS proxy. It remains
   # a standalone, independently installable chart so other web UIs can reuse it.
   # Gated so operators who provide their own proxy (or use Gateway API) can drop it.
   - name: cors-proxy
-    version: "0.12.2"
+    version: "0.12.3"
     repository: "oci://ghcr.io/fabian-albrecht/greenhouse-helm/charts"
     condition: cors-proxy.enabled

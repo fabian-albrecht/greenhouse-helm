@@ -17,7 +17,7 @@ spec:
       kind: Backend
       name: {{ .Release.Name }}-apiserver
   validation:
-    hostname: {{ required "apiserverHostname is required" .Values.apiserverHostname }}
+    hostname: {{ required "gateway.apiserverHostname is required" .Values.gateway.apiserverHostname }}
     caCertificateRefs:
       - group: ""
         kind: ConfigMap
