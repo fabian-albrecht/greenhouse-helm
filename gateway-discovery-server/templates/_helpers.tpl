@@ -20,6 +20,6 @@ SPDX-License-Identifier: Apache-2.0
 {{- if .Values.hostname -}}
 {{ .Values.hostname }}
 {{- else -}}
-ghapi.{{ required "global.dnsDomain is required" .Values.global.dnsDomain }}
+{{ .Values.subDomain }}.{{ required "global.dnsDomain is required" .Values.global.dnsDomain }}
 {{- end -}}
 {{- end }}

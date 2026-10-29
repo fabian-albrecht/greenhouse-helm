@@ -9,8 +9,12 @@ global:
   # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
   dnsDomain: ""
 
-# Hostname at which the API server discovery endpoints are exposed.
-# Defaults to "ghapi.<global.dnsDomain>" when left empty.
+# Subdomain for this chart's exposed hostname (combined with global.dnsDomain),
+# consistent with the other Greenhouse charts (idproxy "auth", cors-proxy "api").
+subDomain: "discovery"
+
+# Full hostname at which the API server discovery endpoints are exposed.
+# Overrides subDomain when set. Defaults to "<subDomain>.<global.dnsDomain>".
 hostname: ""
 
 # Hostname of the API server used as the static Backend target.
