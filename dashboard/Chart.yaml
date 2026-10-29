@@ -13,6 +13,6 @@ dependencies:
   # a standalone, independently installable chart so other web UIs can reuse it.
   # Gated so operators who provide their own proxy (or use Gateway API) can drop it.
   - name: cors-proxy
-    version: ">=0.0.0"
-    repository: "file://../cors-proxy"
+    version: "0.12.2"
+    repository: "oci://ghcr.io/fabian-albrecht/greenhouse-helm/charts"
     condition: cors-proxy.enabled
