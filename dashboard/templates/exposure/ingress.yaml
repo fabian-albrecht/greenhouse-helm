@@ -3,6 +3,12 @@ SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Greenhouse c
 SPDX-License-Identifier: Apache-2.0
 */}}
 
+{{/*
+Dashboard exposure — Ingress mode (default, opt-in via ingress.enabled).
+A future gateway implementation (HTTPRoute/ListenerSet attaching to the central
+Greenhouse Gateway) will live alongside this file under exposure/gateway/,
+mirroring templates/cors-proxy/gateway/ and gated by a dashboard gateway toggle.
+*/}}
 {{- if .Values.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress

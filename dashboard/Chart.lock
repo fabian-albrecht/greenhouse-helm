@@ -1,6 +1,0 @@
-dependencies:
-- name: cors-proxy
-  repository: oci://ghcr.io/fabian-albrecht/greenhouse-helm/charts
-  version: 0.12.3
-digest: sha256:9f6ffc11a6b05372a010f32ca20ad22076e7ccc6b31a916b0fd90eddc360c829
-generated: "2026-10-29T10:00:00.000000+01:00"

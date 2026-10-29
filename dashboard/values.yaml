@@ -34,7 +34,71 @@ dashboard:
   demoUser:
     token: demo
 
-# Bundled cors-proxy subchart. Enabled by default; the dashboard needs a CORS
-# proxy in front of the Kubernetes API. Set to false to supply your own.
-cors-proxy:
+# Merged-in cors-proxy (formerly a subchart dependency). The dashboard needs a
+# CORS proxy in front of the Kubernetes API for the browser. Keep in sync with
+# the standalone greenhouse-helm-fork/cors-proxy chart. Set enabled=false to
+# supply your own proxy or when fronting the API via Gateway API elsewhere.
+# NOTE: the exposed hostname is NOT configured here — it is derived from the
+# top-level corsProxySubDomain (single source of truth with the dashboard's
+# appProps apiEndpoint), so ingress and gateway modes can't drift.
+corsProxy:
   enabled: true
+
+  replicaCount: 2
+
+  image:
+    repository: ghcr.io/cloudoperators/greenhouse
+    pullPolicy: IfNotPresent
+    # Pinned (no longer follows chart appVersion now that cors-proxy shares the
+    # dashboard chart). Overrides the image tag; a digest takes precedence.
+    tag: v0.18.0
+    # digest: ""
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: false
+    annotations: {}
+    name: ""
+
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  # Deployment platform. Selects cert handling (tls-acme vs gardener cert-service).
+  #   generic | gardener
+  platform: generic
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations: {}
+    tls: true
+
+  # Gateway API settings. When gateway.enabled=true and Gateway API CRDs are present,
+  # a ListenerSet, HTTPRoute, Backend, BackendTLSPolicy and CORS TrafficPolicy are
+  # rendered instead of an Ingress+Deployment. Mutually exclusive with ingress.enabled.
+  gateway:
+    enabled: false
+    # Hostname of the API server used as the static Backend target.
+    apiserverHostname: "kubernetes.default.svc"
+    # Name/namespace of the central Gateway deployed by the manager chart.
+    parentRefName: ""
+    parentRefNamespace: ""
+    # Annotations placed on the ListenerSet resource (e.g. cert-manager issuer).
+    listenerSetAnnotations: {}
+    # Annotations placed on the HTTPRoute resource (e.g. external-dns).
+    httpRouteAnnotations: {}
+    # TLS certificate Secret name for the HTTPS listener (defaults to <fullname>-tls).
+    tls:
+      secretName: ""
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
