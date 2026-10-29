@@ -20,6 +20,21 @@ spec:
   allowedListeners:
     namespaces:
       from: {{ .Values.gateway.allowedListenersFrom }}
+  # The Gateway API requires at least one listener on the Gateway itself
+  # (CRD minItems: 1); the per-component HTTPS listeners are attached via
+  # ListenerSets (cors-proxy, gateway-discovery-server). This base HTTP :80
+  # listener satisfies that requirement and is overridable via gateway.listeners.
+  listeners:
+    {{- if .Values.gateway.listeners }}
+    {{- toYaml .Values.gateway.listeners | nindent 4 }}
+    {{- else }}
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: {{ .Values.gateway.allowedListenersFrom }}
+    {{- end }}
   {{- with .Values.gateway.infrastructureAnnotations }}
   infrastructure:
     annotations:
