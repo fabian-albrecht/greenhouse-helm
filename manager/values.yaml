@@ -48,6 +48,11 @@ gateway:
   # Controls which namespaces may attach ListenerSets to this Gateway.
   # Allowed values: Same, All, Selector (see Gateway API docs).
   allowedListenersFrom: Same
+  # Listeners on the Gateway itself. The Gateway API requires at least one
+  # (CRD minItems: 1); per-component HTTPS listeners are attached via
+  # ListenerSets. Leave empty to use the default HTTP :80 base listener, or
+  # provide your own list here.
+  listeners: []
   # Annotations placed on the Gateway resource itself (e.g. cert-manager issuer, external-dns).
   annotations: {}
   # Annotations placed on spec.infrastructure.annotations (propagated to the underlying LB/proxy).
