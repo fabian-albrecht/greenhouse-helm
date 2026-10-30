@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+# SPDX-License-Identifier: Apache-2.0
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Global values shared across all Greenhouse charts in an umbrella deployment.
+global:
+  # Base DNS domain for this Greenhouse installation (e.g. "greenhouse.example.com").
+  dnsDomain: ""
+
+# Central Gateway API resource that component charts attach to via ListenerSets.
+# Requires gateway.networking.k8s.io/v1 CRDs to be installed (e.g. via kgateway).
+gateway:
+  # Deploy the central Gateway resource. When false, only the discovery server
+  # resources render (and attach to an externally provided Gateway).
+  enabled: false
+  # GatewayClass name to use (e.g. "kgateway"). Required when gateway.enabled=true.
+  className: ""
+  # Controls which namespaces may attach ListenerSets to this Gateway.
+  # Allowed values: Same, All, Selector (see Gateway API docs).
+  allowedListenersFrom: Same
+  # Listeners on the Gateway itself. The Gateway API requires at least one
+  # (CRD minItems: 1); per-component HTTPS listeners are attached via
+  # ListenerSets. Leave empty to use the default HTTP :80 base listener, or
+  # provide your own list here.
+  listeners: []
+  # Annotations placed on the Gateway resource itself (e.g. cert-manager issuer, external-dns).
+  annotations: {}
+  # Annotations placed on spec.infrastructure.annotations (propagated to the underlying LB/proxy).
+  infrastructureAnnotations: {}
+
+# API-server OIDC discovery server. Exposes the Kubernetes discovery endpoints
+# (/.well-known/openid-configuration and /openid/v1/jwks) through the Gateway.
+discovery:
+  # Deploy the discovery server resources. Set to false to deploy only the
+  # central Gateway above.
+  enabled: true
+  # Subdomain for the exposed hostname (combined with global.dnsDomain),
+  # consistent with the other Greenhouse charts (idproxy "auth", cors-proxy "api").
+  subDomain: "discovery"
+  # Full hostname at which the discovery endpoints are exposed.
+  # Overrides subDomain when set. Defaults to "<subDomain>.<global.dnsDomain>".
+  hostname: ""
+  # Hostname of the API server used as the static Backend target.
+  apiserverHostname: "kubernetes.default.svc"
+  # Reference to the central Gateway the discovery ListenerSet attaches to.
+  # Defaults to this chart's own Gateway (<release>-gateway) when empty; set to
+  # attach to an externally managed Gateway instead.
+  parentRefName: ""
+  parentRefNamespace: ""
+  # Annotations placed on the ListenerSet resource (e.g. cert-manager issuer).
+  listenerSetAnnotations: {}
+  # Annotations placed on the HTTPRoute resource (e.g. external-dns).
+  httpRouteAnnotations: {}
+  # TLS certificate Secret name for the HTTPS listener.
+  # Defaults to <fullname>-tls; cert-manager will create the Secret at this name.
+  tls:
+    secretName: ""

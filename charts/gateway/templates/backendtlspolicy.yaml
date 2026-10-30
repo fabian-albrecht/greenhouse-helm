@@ -1,0 +1,23 @@
+{{/*
+SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+SPDX-License-Identifier: Apache-2.0
+*/}}
+
+{{- if and .Values.discovery.enabled (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1") -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: {{ .Release.Name }}-apiserver
+  namespace: {{ .Release.Namespace }}
+spec:
+  targetRefs:
+    - group: gateway.kgateway.dev
+      kind: Backend
+      name: {{ .Release.Name }}-apiserver
+  validation:
+    hostname: {{ required "discovery.apiserverHostname is required" .Values.discovery.apiserverHostname }}
+    caCertificateRefs:
+      - group: ""
+        kind: ConfigMap
+        name: kube-root-ca.crt
+{{- end }}

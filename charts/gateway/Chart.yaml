@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v2
+name: gateway
+description: >-
+  Central Greenhouse Gateway (Gateway API) plus the API-server OIDC discovery
+  server that exposes the Kubernetes discovery endpoints through it.
+type: application
+version: 0.1.0
+appVersion: "v0.18.0"

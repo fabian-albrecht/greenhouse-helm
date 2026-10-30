@@ -1,0 +1,43 @@
+{{/*
+SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+SPDX-License-Identifier: Apache-2.0
+*/}}
+
+{{- if and .Values.gateway.enabled (.Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1") -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "gateway.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gateway.labels" . | nindent 4 }}
+  {{- with .Values.gateway.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  gatewayClassName: {{ required "gateway.className is required when gateway.enabled=true" .Values.gateway.className }}
+  allowedListeners:
+    namespaces:
+      from: {{ .Values.gateway.allowedListenersFrom }}
+  # The Gateway API requires at least one listener on the Gateway itself
+  # (CRD minItems: 1); the per-component HTTPS listeners are attached via
+  # ListenerSets (cors-proxy, discovery server). This base HTTP :80 listener
+  # satisfies that requirement and is overridable via gateway.listeners.
+  listeners:
+    {{- if .Values.gateway.listeners }}
+    {{- toYaml .Values.gateway.listeners | nindent 4 }}
+    {{- else }}
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: {{ .Values.gateway.allowedListenersFrom }}
+    {{- end }}
+  {{- with .Values.gateway.infrastructureAnnotations }}
+  infrastructure:
+    annotations:
+      {{- toYaml . | nindent 6 }}
+  {{- end }}
+{{- end }}
