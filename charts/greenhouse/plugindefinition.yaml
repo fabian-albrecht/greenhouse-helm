@@ -9,11 +9,11 @@ spec:
   displayName: greenhouse
   description: >-
     Greenhouse control plane — controller-manager, admission webhooks, cors-proxy that reconcile Greenhouse resources (clusters, plugins, organizations, teams).
-  version: "0.26.0"
+  version: "0.27.0"
   helmChart:
     name: greenhouse
     repository: oci://ghcr.io/cloudoperators/greenhouse-helm/charts
-    version: 0.26.0
+    version: 0.27.0
   options:
     - name: global.dnsDomain
       displayName: DNS domain

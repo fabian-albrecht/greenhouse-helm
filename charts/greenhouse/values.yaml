@@ -120,6 +120,16 @@ controllerManager:
 webhook:
   replicas: 2
 
+  # Webhook serving-cert source. When certManager.enabled is true, a cert-manager
+  # Issuer+Certificate provision the cert and the controller's cert-rotator is
+  # disabled. When false (default), the controller self-seeds the cert into the
+  # greenhouse-webhook-cert Secret via its built-in rotator (no cert-manager).
+  certManager:
+    enabled: false
+  # Bring your own serving-cert Secret instead of self-seeding or cert-manager.
+  secret:
+    useExisting: false
+
   service:
     type: ClusterIP
     ports:
