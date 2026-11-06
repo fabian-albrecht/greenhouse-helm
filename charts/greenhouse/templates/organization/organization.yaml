@@ -1,0 +1,28 @@
+{{/*
+SPDX-FileCopyrightText: 2026 SAP SE or an SAP affiliate company and Greenhouse contributors
+SPDX-License-Identifier: Apache-2.0
+*/}}
+
+{{- with .Values.organizations }}
+{{- range $name, $org := . }}
+---
+apiVersion: greenhouse.sap/v1alpha1
+kind: Organization
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    "helm.sh/resource-policy": keep
+    {{- with $org.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with $org.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- with omit $org "annotations" "labels" }}
+spec:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
