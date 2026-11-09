@@ -184,6 +184,16 @@ spec:
                   ReleaseNamespace is the namespace in the remote cluster to which the backend is deployed.
                   Defaults to the Greenhouse managed namespace if not set.
                 type: string
+              timeout:
+                default: 5m
+                description: |-
+                  Timeout is the timeout for individual Helm operations, including waiting for resources to become ready.
+                  Defaults to 5m when not set. The value must be a duration greater than 1m, using s, m, or h units.
+                pattern: ^([0-9]+(\.[0-9]+)?(s|m|h))+$
+                type: string
+                x-kubernetes-validations:
+                - message: timeout must be greater than 1m
+                  rule: duration(self) > duration('1m')
               waitFor:
                 description: WaitFor defines other Plugins to wait for before installing
                   this Plugin.
@@ -309,6 +319,16 @@ spec:
                 description: LastReconciledAt contains the value when the reconcile
                   was last triggered via annotation.
                 type: string
+              releaseEvents:
+                description: ReleaseEvents tracks the last HelmRelease revision sent
+                  as a release event.
+                properties:
+                  lastReportedDigest:
+                    description: LastReportedDigest is the HelmRelease history digest
+                      reported last, or recorded when release events were switched
+                      on.
+                    type: string
+                type: object
               statusConditions:
                 description: StatusConditions contain the different conditions that
                   constitute the status of the Plugin.
