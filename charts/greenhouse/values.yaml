@@ -182,6 +182,34 @@ cors:
   nodeSelector: {}
   tolerations: []
 
+# Organization custom resource (greenhouse.sap/Organization).
+# Renders a single Organization. All spec fields are optional — omit any you don't need.
+#
+# Example:
+#   organization:
+#     name: my-org
+#     displayName: "My Organisation"
+#     mappedOrgAdminIdPGroup: my-org-admins
+#     authentication:
+#       oidc:
+#         issuer: https://idp.example.com
+#         clientIDReference:
+#           name: my-org-oidc
+#           key: clientID
+#         clientSecretReference:
+#           name: my-org-oidc
+#           key: clientSecret
+organization: {}
+
 # Default Catalog custom resources (greenhouse.sap/Catalog). Keyed by name;
 # each entry renders a Catalog with its spec.sources passed through verbatim.
+#
+# Example:
+#   catalogs:
+#     greenhouse-helm:
+#       sources:
+#         - repository: https://github.com/cloudoperators/greenhouse-helm.git
+#           resources:
+#             - charts/*/plugindefinition.yaml
+#           interval: 10m
 catalogs: {}

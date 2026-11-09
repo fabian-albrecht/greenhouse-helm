@@ -12,7 +12,6 @@ metadata:
   name: {{ $name }}
   namespace: {{ $.Release.Namespace }}
   annotations:
-    "helm.sh/resource-policy": keep
     {{- with $catalog.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

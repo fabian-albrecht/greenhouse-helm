@@ -4,9 +4,6 @@ on:
     paths:
       - 'charts/**'
 
-env:
-  REGISTRY: ghcr.io
-
 jobs:
   detect-changes:
     name: Detect Changed Charts

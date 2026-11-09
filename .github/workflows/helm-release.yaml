@@ -14,7 +14,6 @@ permissions:
 
 env:
   REGISTRY_LOGIN: ghcr.io
-  OCI_BASE: ghcr.io/cloudoperators/greenhouse-helm/charts
 
 jobs:
   detect-changes:
@@ -98,6 +97,9 @@ jobs:
           registry: ${{ env.REGISTRY_LOGIN }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set OCI base path
+        run: echo "OCI_BASE=ghcr.io/${GITHUB_REPOSITORY,,}/charts" >> "$GITHUB_ENV"
 
       - name: Check if Helm chart with same version already exists
         id: check-chart
